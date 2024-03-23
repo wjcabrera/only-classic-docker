@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  # front:
+  #   container_name: front
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: ./images/front/Dockerfile
+  #     args:
+  #       APP_PATH: ${FRONT_PATH}
+  #   networks:
+  #     - only-classics-network
+  #   # ports:
+  #   #   - "3000:3000"
+  #   depends_on:
+  #     - database
+  #   volumes:
+  #     - ${FRONT_PATH}:/app
+
+  back:
+    container_name: back
+    restart: always
+    build:
+      context: .
+      dockerfile: ./images/back/Dockerfile
+      args:
+        APP_PATH: ${BACK_PATH}
+    networks:
+      - only-classics-network
+    depends_on:
+      - database
+    volumes:
+      - ${BACK_PATH}:/app
+    ports:
+      - ${PORT_BACK}:3000
+
+  database:
+    container_name: database
+    image: "postgres:14"
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+      - PGUSER=${DB_USER}
+    healthcheck:
+      test: pg_isready
+    networks:
+      - only-classics-network
+    ports:
+      - ${PORT_DB}:5432
+    volumes:
+      - only-classics-db:/var/lib/postgresql/data
+
+volumes:
+  only-classics-db: null
+
+networks:
+  only-classics-network:
+    driver: bridge
