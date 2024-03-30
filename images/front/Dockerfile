@@ -8,8 +8,8 @@ COPY ${APP_PATH}/package*.json ./
 
 RUN npm i
 
+RUN npm i -g vite
+
 COPY ${APP_PATH} /app
 
-RUN npm run build
-
-CMD ["npm", "run", "dev"]
+CMD npm i && npm start

@@ -12,6 +12,6 @@ RUN npm i -g @nestjs/cli
 
 COPY ${APP_PATH} /app
 
-RUN npm run build
+# RUN npm run build
 
-CMD ["npm", "run", "start:dev"]
+CMD npm i && npm run start:dev
